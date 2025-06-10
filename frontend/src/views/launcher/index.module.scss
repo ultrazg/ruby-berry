@@ -1,0 +1,29 @@
+.wrapper {
+  background: #F3F3F3;
+  //background: #FEEAED;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .content {
+    .logo {
+      width: 132px;
+      height: 132px;
+      margin-bottom: 12px;
+
+      img {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .spin {
+      display: flex;
+      justify-content: center;
+      margin-top: 36px;
+    }
+  }
+}
