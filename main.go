@@ -2,6 +2,7 @@ package main
 
 import (
 	"embed"
+	"fmt"
 
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
@@ -13,14 +14,18 @@ import (
 //go:embed all:frontend/dist
 var assets embed.FS
 
+//go:embed build/appicon.png
+var icon []byte
+
 func main() {
 	app := NewApp()
-	appTitle := app.Env().AppName
 
 	err := wails.Run(&options.App{
-		Title:  appTitle,
-		Width:  800,
-		Height: 500,
+		Title:     AppName,
+		Width:     800,
+		Height:    500,
+		MinWidth:  800,
+		MinHeight: 500,
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},
@@ -35,6 +40,11 @@ func main() {
 		Mac: &mac.Options{
 			TitleBar:   mac.TitleBarDefault(),
 			Appearance: mac.DefaultAppearance,
+			About: &mac.AboutInfo{
+				Title:   fmt.Sprintf("%s %s", AppName, AppVersion),
+				Message: "May you shine like a ruby\r\n\r\n© 2025 RubyBerry Developers.",
+				Icon:    icon,
+			},
 		},
 		Debug: options.Debug{
 			OpenInspectorOnStartup: true,

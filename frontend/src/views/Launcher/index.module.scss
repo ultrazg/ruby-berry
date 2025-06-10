@@ -1,5 +1,9 @@
+@import '@/assets/_common.scss';
+
 .wrapper {
-  background: #F3F3F3;
+  @include no-select;
+
+  background: #f3f3f3;
   //background: #FEEAED;
   width: 100vw;
   height: 100vh;
