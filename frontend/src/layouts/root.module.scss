@@ -1,9 +1,12 @@
+@import '@/assets/_common.scss';
+
 .wrapper {
   display: flex;
 
   .nav {
+    @include no-select;
     width: 220px;
-    padding: 8px 0 8px 8px;
+    padding: 8px;
     background: #FFF7F8;
 
     .appLogo {
@@ -26,6 +29,53 @@
       text-align: center;
       font-style: italic;
       color: #64172B;
+    }
+
+    .navList {
+      margin-top: 28px;
+
+      .navItem {
+        color: #64172B;
+        padding: 6px;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        transition: all .2s ease;
+        border-radius: 6px;
+        cursor: default;
+        text-decoration: none;
+
+        svg {
+          padding-right: 8px;
+        }
+
+        &:hover {
+          background: #FEEAED;
+        }
+
+        &:active {
+          background: #FEEAED;
+        }
+      }
+
+      .navItemActive {
+        color: #64172B;
+        padding: 6px;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        transition: all .2s ease;
+        border-radius: 6px;
+        cursor: default;
+        text-decoration: none;
+        background: #FEEAED;
+
+        svg {
+          padding-right: 8px;
+        }
+      }
     }
 
     .version {
