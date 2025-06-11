@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styles from './root.module.scss'
 import RubyBerry from '@/assets/images/RubyBerry.png'
-import { version } from '../../package.json'
-import { CheckIcon, MinusIcon } from '@/components'
+import { version, name } from '../../package.json'
+import { CheckIcon, MinusIcon, InfoIcon, SettingIcon } from '@/components'
 import { NavLink, Outlet } from 'react-router-dom'
 
 /**
@@ -10,6 +10,8 @@ import { NavLink, Outlet } from 'react-router-dom'
  * @constructor
  */
 export const Root: React.FC = () => {
+  const [hasNewVersion, setHasNewVersion] = useState<boolean>(true)
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.nav}>
@@ -42,9 +44,34 @@ export const Root: React.FC = () => {
             <CheckIcon />
             已办事项
           </NavLink>
+
+          <NavLink
+            className={({ isActive }) =>
+              isActive ? styles.navItemActive : styles.navItem
+            }
+            to="setting"
+          >
+            <SettingIcon />
+            偏好设置
+          </NavLink>
+
+          <NavLink
+            className={({ isActive }) =>
+              isActive ? styles.navItemActive : styles.navItem
+            }
+            to="about"
+          >
+            <InfoIcon />
+            关于 {name}
+          </NavLink>
         </div>
 
-        <div className={styles.version}>v{version}</div>
+        <div className={styles.version}>
+          v{version}
+          {hasNewVersion && (
+            <span className={styles.newVersionTag}>发现新版本</span>
+          )}
+        </div>
       </div>
 
       <div className={styles.content}>

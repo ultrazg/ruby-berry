@@ -1,6 +1,7 @@
 import { createHashRouter } from 'react-router-dom'
-import { Launcher, PendingTask, FinishedTask } from '@/views'
+import { Launcher, PendingTask, FinishedTask, About, Setting } from '@/views'
 import { Root } from '@/layouts/root'
+import { Crash } from '@/layouts/crash'
 
 export const router = createHashRouter([
   // {
@@ -10,6 +11,7 @@ export const router = createHashRouter([
   {
     path: '/',
     Component: Root,
+    errorElement: <Crash />,
     children: [
       {
         path: 'pending',
@@ -18,6 +20,14 @@ export const router = createHashRouter([
       {
         path: 'finished',
         element: <FinishedTask />,
+      },
+      {
+        path: 'setting',
+        element: <Setting />,
+      },
+      {
+        path: 'about',
+        element: <About />,
       },
     ],
   },
