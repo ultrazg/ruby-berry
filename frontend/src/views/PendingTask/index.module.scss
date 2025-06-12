@@ -1,0 +1,19 @@
+.wrapper {
+  .from {
+    display: flex;
+    gap: 12px;
+    padding-bottom: 12px;
+
+    .inputLayout {
+      flex: 3;
+    }
+
+    .buttonLayout {
+      flex: 1;
+
+      button {
+        width: 100%;
+      }
+    }
+  }
+}

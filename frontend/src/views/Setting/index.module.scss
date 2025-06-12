@@ -1,3 +1,5 @@
-.wrapper {
+@import '@/assets/_common.scss';
 
+.wrapper {
+  @include no-select;
 }

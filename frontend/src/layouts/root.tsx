@@ -10,7 +10,7 @@ import { NavLink, Outlet } from 'react-router-dom'
  * @constructor
  */
 export const Root: React.FC = () => {
-  const [hasNewVersion, setHasNewVersion] = useState<boolean>(true)
+  const [hasNewVersion, setHasNewVersion] = useState<boolean>(false)
 
   return (
     <div className={styles.wrapper}>
