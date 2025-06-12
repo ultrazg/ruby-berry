@@ -1,19 +1,42 @@
+@import '@/assets/_common.scss';
+
 .wrapper {
-  .from {
-    display: flex;
-    gap: 12px;
-    padding-bottom: 12px;
+  .form {
+    margin-bottom: 12px;
 
     .inputLayout {
-      flex: 3;
-    }
+      display: flex;
+      gap: 12px;
 
-    .buttonLayout {
-      flex: 1;
+      .input {
+        flex: 3;
+      }
 
-      button {
-        width: 100%;
+      .button {
+        flex: 1;
+        display: flex;
+        gap: 12px;
+
+        button {
+          flex: 1;
+        }
       }
     }
+
+    .extraLayout {
+      @include no-select;
+
+      height: 30px;
+      line-height: 30px;
+      font-size: 14px;
+    }
+  }
+
+  .taskWrapper {
+    height: calc(100vh - 60px);
+  }
+
+  .taskWrapperExtra {
+    height: calc(100vh - 90px);
   }
 }

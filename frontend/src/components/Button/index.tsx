@@ -7,6 +7,7 @@ type IProps = {
   variant?: 'classic' | 'solid' | 'soft' | 'surface' | 'outline' | 'ghost'
   children: React.ReactNode
   loading?: boolean
+  onClick?: () => void
 }
 
 export const Button: React.FC<IProps> = ({
@@ -15,6 +16,7 @@ export const Button: React.FC<IProps> = ({
   disabled,
   variant,
   loading,
+  onClick,
 }) => {
   return (
     <RButton
@@ -22,6 +24,7 @@ export const Button: React.FC<IProps> = ({
       disabled={disabled}
       variant={variant}
       loading={loading}
+      onClick={() => onClick?.()}
     >
       {children}
     </RButton>
