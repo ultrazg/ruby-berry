@@ -1,0 +1,50 @@
+@import '@/assets/_common.scss';
+@import '@/assets/_variables.scss';
+
+.wrapper {
+  @include no-select;
+  font-size: 14px;
+
+  .taskItem {
+    height: 46px;
+    display: flex;
+
+    .info {
+      flex: 1;
+
+      .taskTitle {
+        height: 23px;
+        line-height: 23px;
+        font-weight: bold;
+        color: $primary-font-color;
+        text-decoration: line-through;
+        overflow: hidden;
+        text-align: left;
+        display: -webkit-box;
+        line-clamp: 1;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+      }
+
+      .taskDetail {
+        height: 23px;
+        line-height: 23px;
+        font-size: 14px;
+        color: #CECECE;
+
+        span {
+          &:first-child {
+            margin-right: 12px;
+          }
+        }
+      }
+    }
+
+    .options {
+      width: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: right;
+    }
+  }
+}

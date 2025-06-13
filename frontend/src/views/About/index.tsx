@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styles from './index.module.scss'
 import RubyBerry from '@/assets/images/RubyBerry.png'
-import { GetEnv } from '@/utils'
+import { GetEnv, toast } from '@/utils'
 import { EnvInfo } from '@/types'
 import { Button, UpdateIcon } from '@/components'
 
@@ -48,6 +48,11 @@ export const About: React.FC = () => {
         <Button
           size="1"
           variant="soft"
+          onClick={() => {
+            toast('当前已是最新版本！', {
+              type: 'success',
+            })
+          }}
         >
           <UpdateIcon />
           检查更新...

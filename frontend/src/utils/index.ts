@@ -1,3 +1,4 @@
 import { GetEnv } from './env'
+import { toast } from './toast'
 
-export { GetEnv }
+export { GetEnv, toast }
