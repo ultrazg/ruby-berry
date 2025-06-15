@@ -11,7 +11,7 @@ import { toast } from '@/utils'
 export const FinishedTask: React.FC = () => {
   return (
     <div className={styles.wrapper}>
-      <Card>
+      <Card style={{ marginBottom: 12 }}>
         <div className={styles.taskItem}>
           <div className={styles.info}>
             <div className={styles.taskTitle}>吃饭</div>

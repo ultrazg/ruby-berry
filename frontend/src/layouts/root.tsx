@@ -45,15 +45,15 @@ export const Root: React.FC = () => {
             已办事项
           </NavLink>
 
-          <NavLink
-            className={({ isActive }) =>
-              isActive ? styles.navItemActive : styles.navItem
-            }
-            to="setting"
-          >
-            <SettingIcon />
-            偏好设置
-          </NavLink>
+          {/*<NavLink*/}
+          {/*  className={({ isActive }) =>*/}
+          {/*    isActive ? styles.navItemActive : styles.navItem*/}
+          {/*  }*/}
+          {/*  to="setting"*/}
+          {/*>*/}
+          {/*  <SettingIcon />*/}
+          {/*  偏好设置*/}
+          {/*</NavLink>*/}
 
           <NavLink
             className={({ isActive }) =>

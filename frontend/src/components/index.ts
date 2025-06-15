@@ -2,6 +2,7 @@ import { Spin } from './Spin'
 import { Button } from './Button'
 import { Empty } from './Empty'
 import { CheckIcon } from './Icons/CheckIcon'
+import { CheckLineIcon } from './Icons/CheckLineIcon'
 import { MinusIcon } from './Icons/MinusIcon'
 import { InfoIcon } from './Icons/InfoIcon'
 import { UpdateIcon } from './Icons/UpdateIcon'
@@ -14,6 +15,7 @@ export {
   Button,
   Empty,
   CheckIcon,
+  CheckLineIcon,
   MinusIcon,
   InfoIcon,
   UpdateIcon,
