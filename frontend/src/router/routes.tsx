@@ -4,17 +4,17 @@ import { Root } from '@/layouts/root'
 import { Crash } from '@/layouts/crash'
 
 export const router = createHashRouter([
-  // {
-  //   path: '/',
-  //   element: <Launcher />,
-  // },
+  {
+    path: '/launcher',
+    element: <Launcher />,
+  },
   {
     path: '/',
     Component: Root,
     errorElement: <Crash />,
     children: [
       {
-        path: 'pending',
+        index: true,
         element: <PendingTask />,
       },
       {

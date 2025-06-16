@@ -13,6 +13,7 @@ export const About: React.FC = () => {
   const [envInfo, setEnvInfo] = useState<EnvInfo>({
     app_name: '',
     app_version: '',
+    build: '',
     arch: '',
     platform: '',
   })
@@ -37,16 +38,17 @@ export const About: React.FC = () => {
 
         <p>{envInfo.app_name}</p>
 
-        <p>Version: {envInfo.app_version}</p>
+        <p>
+          Version: {envInfo.app_version}（{envInfo.build}）
+        </p>
 
-        <p>© 2025 unknown.</p>
+        <p>© {new Date().getFullYear()} unknown.</p>
 
-        <p>May you shine like a ruby</p>
+        <p>May you shine like a ruby.</p>
       </div>
 
       <div className={styles.optionButton}>
         <Button
-          size="1"
           variant="soft"
           onClick={() => {
             toast('当前已是最新版本！', {

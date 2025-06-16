@@ -51,6 +51,7 @@ export const PendingTask: React.FC = () => {
             <div className={styles.extraOption}>
               <label>计划完成时间：</label>
               <input
+                className={styles.timePicker}
                 type="datetime-local"
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   const localTime: string = new Date(

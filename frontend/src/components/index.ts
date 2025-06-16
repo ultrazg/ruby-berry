@@ -1,6 +1,7 @@
 import { Spin } from './Spin'
 import { Button } from './Button'
 import { Empty } from './Empty'
+import { Modal } from './Modal'
 import { CheckIcon } from './Icons/CheckIcon'
 import { CheckLineIcon } from './Icons/CheckLineIcon'
 import { MinusIcon } from './Icons/MinusIcon'
@@ -14,6 +15,7 @@ export {
   Spin,
   Button,
   Empty,
+  Modal,
   CheckIcon,
   CheckLineIcon,
   MinusIcon,
