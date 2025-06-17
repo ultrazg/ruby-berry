@@ -15,10 +15,10 @@ export const Root: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false)
 
   useEffect(() => {
-    // setLoading(true)
-    // setTimeout(() => {
-    //   setLoading(false)
-    // }, 5000)
+    setLoading(true)
+    setTimeout(() => {
+      setLoading(false)
+    }, 2500)
   }, [])
 
   return (

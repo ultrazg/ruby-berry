@@ -11,3 +11,11 @@ func (a *App) Env() EnvInfo {
 		Arch:       runtime.GOARCH,
 	}
 }
+
+func isWindows() bool {
+	return runtime.GOOS == "windows"
+}
+
+func isMacOS() bool {
+	return runtime.GOOS == "darwin"
+}

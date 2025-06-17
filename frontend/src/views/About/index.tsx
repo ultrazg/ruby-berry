@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import styles from './index.module.scss'
 import RubyBerry from '@/assets/images/RubyBerry.png'
-import { GetEnv, toast } from '@/utils'
-import { EnvInfo } from '@/types'
+import { GetEnv, toast, ReadConfig, UpdateConfig } from '@/utils'
+import { EnvInfo, TaskItem } from '@/types'
 import { Button, UpdateIcon } from '@/components'
 
 /**
@@ -17,6 +17,34 @@ export const About: React.FC = () => {
     arch: '',
     platform: '',
   })
+
+  const onReadConfig = () => {
+    ReadConfig()
+      .then((res) => {
+        if (res.flag) {
+          console.log('true', res.task_data)
+        } else {
+          console.log('false', res.error)
+        }
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
+  const onUpdateConfig = async () => {
+    const taskItem: TaskItem = {
+      id: '1',
+      title: '睡觉',
+      is_alert: true,
+      is_finish: true,
+      create_time: '2023-01-02 03:04:05',
+      finish_time: '2023-01-02 03:04:05',
+      estimated_time: '2023-01-02 03:04:05',
+    }
+
+    await UpdateConfig('1', taskItem)
+  }
 
   useEffect(() => {
     GetEnv()
@@ -50,10 +78,9 @@ export const About: React.FC = () => {
       <div className={styles.optionButton}>
         <Button
           variant="soft"
-          onClick={() => {
-            toast('当前已是最新版本！', {
-              type: 'success',
-            })
+          onClick={async () => {
+            // onReadConfig()
+            await onUpdateConfig()
           }}
         >
           <UpdateIcon />
