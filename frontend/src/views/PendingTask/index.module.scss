@@ -43,8 +43,8 @@
           border-radius: 4px;
         }
 
-        &:last-child {
-          margin-left: 14px;
+        &:first-child {
+          margin-right: 14px;
         }
       }
     }
@@ -92,7 +92,7 @@
             color: #CECECE;
 
             &:last-child {
-              margin-left: 14px;
+              margin-left: 32px;
             }
           }
 

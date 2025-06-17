@@ -8,7 +8,13 @@ import {
   ResetIcon,
   TrashIcon,
 } from '@/components'
-import { toast, ReadConfig } from '@/utils'
+import {
+  toast,
+  generateNowTimestamp,
+  timestampToDate,
+  ReadTaskData,
+  AddTaskData,
+} from '@/utils'
 import { TaskData, TaskItem } from '@/types'
 import dayjs from 'dayjs'
 
@@ -18,18 +24,27 @@ import dayjs from 'dayjs'
  */
 export const PendingTask: React.FC = () => {
   const [hasFocus, setHasFocus] = useState<boolean>(false)
-  const [tasks, setTasks] = useState<TaskData>()
+  const [tasks, setTasks] = useState<TaskItem[]>()
   const [taskTitle, setTaskTitle] = useState<string>('')
   const [estimatedTime, setEstimatedTime] = useState<string>('')
   const [isAlert, setIsAlert] = useState<boolean>(false)
 
-  useEffect(() => {
-    ReadConfig()
+  const getTaskData = () => {
+    ReadTaskData()
       .then((res) => {
         if (res.flag) {
-          setTasks(res.task_data)
+          const taskList: TaskItem[] = []
 
-          console.log(res.task_data)
+          res.task_data.records.forEach((item) => {
+            return taskList.push({
+              ...item,
+              createTime: timestampToDate(Number(item.createTime)),
+              estimatedTime: timestampToDate(Number(item.estimatedTime)),
+              finishTime: timestampToDate(Number(item.finishTime)),
+            })
+          })
+
+          setTasks(taskList)
         } else {
           toast(res.error, {
             type: 'warn',
@@ -39,15 +54,41 @@ export const PendingTask: React.FC = () => {
       .catch((err) => {
         console.error(err)
       })
-  }, [])
+  }
 
   const onCreate = () => {
-    // const taskItem: TaskItem = {
-    //   id: String(dayjs().valueOf()),
-    //   title: taskTitle,
-    //
-    // }
+    const taskItem: TaskItem = {
+      id: String(generateNowTimestamp()),
+      title: taskTitle,
+      isAlert: isAlert,
+      isFinish: false,
+      estimatedTime: estimatedTime,
+      createTime: String(generateNowTimestamp()),
+      finishTime: '',
+    }
+
+    AddTaskData(taskItem)
+      .then((res) => {
+        if (!res) {
+          toast('添加成功', {
+            type: 'success',
+          })
+
+          getTaskData()
+        } else {
+          toast(res, {
+            type: 'warn',
+          })
+        }
+      })
+      .catch((err) => {
+        console.error(err)
+      })
   }
+
+  useEffect(() => {
+    getTaskData()
+  }, [])
 
   return (
     <div className={styles.wrapper}>
@@ -84,17 +125,6 @@ export const PendingTask: React.FC = () => {
 
         {hasFocus && (
           <div className={styles.extraLayout}>
-            <div className={styles.extraOption}>
-              <label>计划完成时间：</label>
-              <input
-                className={styles.timePicker}
-                type="datetime-local"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  console.log(e.target.value)
-                }}
-              />
-            </div>
-
             <div
               className={styles.extraOption}
               title="将在任务计划完成时间前一小时发出系统提醒"
@@ -105,13 +135,29 @@ export const PendingTask: React.FC = () => {
                 onCheckedChange={(checked: boolean) => setIsAlert(checked)}
               />
             </div>
+
+            {isAlert && (
+              <div className={styles.extraOption}>
+                <label>计划完成时间：</label>
+                <input
+                  className={styles.timePicker}
+                  type="datetime-local"
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    const time = String(
+                      Math.floor(dayjs(e.target.value).valueOf() / 1000),
+                    )
+                    setEstimatedTime(time)
+                  }}
+                />
+              </div>
+            )}
           </div>
         )}
       </div>
 
       <div className={hasFocus ? styles.taskWrapperExtra : styles.taskWrapper}>
-        {tasks?.records.length === 0 && <Empty title="无事件，享受每一天！" />}
-        {tasks?.records.map((item: TaskItem) => (
+        {tasks?.length === 0 && <Empty title="无事件，享受每一天！" />}
+        {tasks?.map((item: TaskItem) => (
           <Card
             style={{ marginBottom: 12 }}
             key={item.id}
@@ -122,10 +168,11 @@ export const PendingTask: React.FC = () => {
 
                 <div className={styles.taskDetail}>
                   <span>
-                    <label>计划完成时间：</label>
-                    {item.estimated_time}
                     <label>提醒：</label>
-                    {item.is_alert ? '已启用' : '已禁用'}
+                    {item.isAlert ? '启用' : '禁用'}
+
+                    <label>计划完成时间：</label>
+                    {item.estimatedTime}
                   </span>
                 </div>
               </div>

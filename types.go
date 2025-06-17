@@ -21,11 +21,11 @@ type TaskData struct {
 type TaskItem struct {
 	ID            string `json:"id"`
 	Title         string `json:"title"`
-	IsAlert       bool   `json:"is_alert"`
-	IsFinish      bool   `json:"is_finish"`
-	CreateTime    string `json:"create_time"`
-	FinishTime    string `json:"finish_time"`
-	EstimatedTime string `json:"estimated_time"`
+	IsAlert       bool   `json:"isAlert"`
+	IsFinish      bool   `json:"isFinish"`
+	CreateTime    string `json:"createTime"`
+	FinishTime    string `json:"finishTime"`
+	EstimatedTime string `json:"estimatedTime"`
 }
 
 type ReadConfigResult struct {

@@ -21,11 +21,11 @@ export type modalType = {
 export type TaskItem = {
   id: string
   title: string
-  is_alert: boolean
-  is_finish: boolean
-  create_time: string
-  finish_time: string
-  estimated_time: string
+  isAlert: boolean
+  isFinish: boolean
+  createTime: string
+  finishTime: string
+  estimatedTime: string
 }
 
 export type TaskData = {

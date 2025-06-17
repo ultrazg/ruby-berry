@@ -11,28 +11,28 @@ import (
 
 const taskDataConf = "task_data.json"
 
-var configFilePath string
+var taskDataFilePath string
 
 func init() {
-	initConfig()
+	initTaskDataFile()
 }
 
-func initConfig() {
+func initTaskDataFile() {
 	if isMacOS() {
 		configDir, err := os.UserConfigDir()
 		if err != nil {
 			log.Printf("获取用户配置目录失败: %v", err)
 		}
 
-		configFilePath = filepath.Join(configDir, AppName)
-		if err := os.MkdirAll(configFilePath, os.ModePerm); err != nil {
+		taskDataFilePath = filepath.Join(configDir, AppName)
+		if err := os.MkdirAll(taskDataFilePath, os.ModePerm); err != nil {
 			log.Printf("创建配置目录失败: %v", err)
 		}
 	} else {
-		configFilePath = "."
+		taskDataFilePath = "."
 	}
 
-	configFile := filepath.Join(configFilePath, taskDataConf)
+	configFile := filepath.Join(taskDataFilePath, taskDataConf)
 
 	println("配置文件：", configFile)
 
@@ -56,9 +56,9 @@ func setDefaults() {
 	viper.SetDefault("records", []TaskData{})
 }
 
-func (a *App) ReadConfig() ReadConfigResult {
-	var c TaskData
-	if err := viper.Unmarshal(&c); err != nil {
+func (a *App) ReadTaskData() ReadConfigResult {
+	var taskData TaskData
+	if err := viper.Unmarshal(&taskData); err != nil {
 		log.Printf("解析配置文件失败: %v", err)
 
 		return ReadConfigResult{
@@ -71,25 +71,30 @@ func (a *App) ReadConfig() ReadConfigResult {
 	return ReadConfigResult{
 		Flag:     true,
 		Error:    "",
-		TaskData: c,
+		TaskData: taskData,
 	}
 }
 
-func (a *App) AddConfig(item TaskItem) string {
+func (a *App) AddTaskData(item TaskItem) string {
 	var taskData TaskData
+
+	if err := viper.Unmarshal(&taskData); err != nil {
+		log.Printf("解析配置文件失败: %v", err)
+		return fmt.Sprintf("读取数据失败，请尝试重启应用: %v", err.Error())
+	}
 
 	taskData.Records = append(taskData.Records, item)
 	viper.Set("records", taskData.Records)
 	if err := viper.WriteConfig(); err != nil {
-		log.Printf("写入配置文件失败: %v", err)
+		log.Printf("添加任务失败: %v", err)
 
-		return fmt.Sprintf("写入配置文件失败: %v", err.Error())
+		return fmt.Sprintf("添加任务失败: %v", err.Error())
 	}
 
 	return ""
 }
 
-func (a *App) DeleteConfig(id string) string {
+func (a *App) DeleteTaskData(id string) string {
 	var taskData TaskData
 
 	for i, task := range taskData.Records {
@@ -97,23 +102,23 @@ func (a *App) DeleteConfig(id string) string {
 			taskData.Records = append(taskData.Records[:i], taskData.Records[i+1:]...)
 			viper.Set("records", taskData.Records)
 			if err := viper.WriteConfig(); err != nil {
-				return fmt.Sprintf("写入配置文件失败: %v", err)
+				return fmt.Sprintf("删除任务失败: %v", err)
 			}
 			return ""
 		}
 	}
 
-	return fmt.Sprintf("找不到匹配的 ID: %s", id)
+	return fmt.Sprintf("找不到匹配的任务 ID: %s", id)
 }
 
-func (a *App) UpdateConfig(id string, item TaskItem) UpdateConfigResult {
+func (a *App) UpdateTaskData(id string, item TaskItem) UpdateConfigResult {
 	var taskData TaskData
-	if err := viper.Unmarshal(&taskData); err != nil {
-		return UpdateConfigResult{
-			Flag:  false,
-			Error: fmt.Sprintf("解析配置文件失败: %v", err),
-		}
-	}
+	// if err := viper.Unmarshal(&taskData); err != nil {
+	// 	return UpdateConfigResult{
+	// 		Flag:  false,
+	// 		Error: fmt.Sprintf("解析配置文件失败: %v", err),
+	// 	}
+	// }
 
 	for i, task := range taskData.Records {
 		if task.ID == id {
@@ -122,7 +127,7 @@ func (a *App) UpdateConfig(id string, item TaskItem) UpdateConfigResult {
 			if err := viper.WriteConfig(); err != nil {
 				return UpdateConfigResult{
 					Flag:  false,
-					Error: fmt.Sprintf("写入配置文件失败: %v", err),
+					Error: fmt.Sprintf("更新任务失败: %v", err),
 				}
 			}
 			return UpdateConfigResult{
@@ -134,6 +139,6 @@ func (a *App) UpdateConfig(id string, item TaskItem) UpdateConfigResult {
 
 	return UpdateConfigResult{
 		Flag:  false,
-		Error: fmt.Sprintf("找不到匹配的 ID: %s", id),
+		Error: fmt.Sprintf("找不到匹配的任务 ID: %s", id),
 	}
 }

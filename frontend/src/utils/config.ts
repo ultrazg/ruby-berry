@@ -1,25 +1,14 @@
 import {
-  ReadConfig as ReadConfigGo,
-  UpdateConfig as UpdateConfigGo,
+  ReadTaskData as ReadTaskDataGo,
+  UpdateTaskData as UpdateTaskDataGo,
+  AddTaskData as AddTaskDataGo,
 } from 'wailsjs/go/main/App'
 import { TaskItem } from '@/types'
-import { toast } from '@/utils/toast'
 
-export const ReadConfig = async () => await ReadConfigGo()
+export const ReadTaskData = async () => await ReadTaskDataGo()
 
-export const UpdateConfig = async (id: string, taskItem: TaskItem) =>
-  await UpdateConfigGo(id, taskItem)
-    .then((res) => {
-      if (res.flag) {
-        toast('更新成功', {
-          type: 'success',
-        })
-      } else {
-        toast(res.error, {
-          type: 'warn',
-        })
-      }
-    })
-    .catch((err) => {
-      console.error(err)
-    })
+export const UpdateTaskData = async (id: string, taskItem: TaskItem) =>
+  await UpdateTaskDataGo(id, taskItem)
+
+export const AddTaskData = async (taskItem: TaskItem) =>
+  await AddTaskDataGo(taskItem)
