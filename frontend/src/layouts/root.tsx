@@ -12,7 +12,7 @@ import { NavLink, Outlet } from 'react-router-dom'
  */
 export const Root: React.FC = () => {
   const [hasNewVersion, setHasNewVersion] = useState<boolean>(false)
-  const [loading, setLoading] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
     setLoading(true)

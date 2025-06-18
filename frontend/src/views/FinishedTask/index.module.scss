@@ -4,6 +4,7 @@
 .wrapper {
   @include no-select;
   font-size: 14px;
+  height: 100%;
 
   .taskItem {
     height: 46px;

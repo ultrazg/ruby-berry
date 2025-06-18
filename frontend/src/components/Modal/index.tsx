@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button, Dialog, Flex } from '@radix-ui/themes'
 import { modalType } from '@/types'
+import './modal.css'
 
 /**
  * @description 模态框

@@ -1,21 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { Card, Flex, IconButton, Switch, TextField } from '@radix-ui/themes'
 import styles from './index.module.scss'
-import {
-  Button,
-  CheckLineIcon,
-  Empty,
-  ResetIcon,
-  TrashIcon,
-} from '@/components'
+import { Button, CheckLineIcon, Empty, TrashIcon, Modal } from '@/components'
 import {
   toast,
   generateNowTimestamp,
   timestampToDate,
   ReadTaskData,
   AddTaskData,
+  DeleteTaskData,
+  UpdateTaskData,
 } from '@/utils'
-import { TaskData, TaskItem } from '@/types'
+import { TaskItem } from '@/types'
 import dayjs from 'dayjs'
 
 /**
@@ -28,6 +24,11 @@ export const PendingTask: React.FC = () => {
   const [taskTitle, setTaskTitle] = useState<string>('')
   const [estimatedTime, setEstimatedTime] = useState<string>('')
   const [isAlert, setIsAlert] = useState<boolean>(false)
+  const [modalInfo, setModalInfo] = useState({
+    open: false,
+    id: '',
+    title: '',
+  })
 
   const getTaskData = () => {
     ReadTaskData()
@@ -36,15 +37,47 @@ export const PendingTask: React.FC = () => {
           const taskList: TaskItem[] = []
 
           res.task_data.records.forEach((item) => {
-            return taskList.push({
-              ...item,
-              createTime: timestampToDate(Number(item.createTime)),
-              estimatedTime: timestampToDate(Number(item.estimatedTime)),
-              finishTime: timestampToDate(Number(item.finishTime)),
-            })
+            if (!item.isFinish) {
+              return taskList.push({
+                ...item,
+                createTime: timestampToDate(Number(item.createTime)),
+                estimatedTime: timestampToDate(Number(item.estimatedTime)),
+                finishTime: timestampToDate(Number(item.finishTime)),
+              })
+            }
           })
 
           setTasks(taskList)
+        } else {
+          toast(res.error, {
+            type: 'warn',
+          })
+        }
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
+  const onFinish = (taskItem: TaskItem) => {
+    console.log('taskItem', taskItem)
+
+    const newTaskItem: TaskItem = {
+      ...taskItem,
+      isFinish: true,
+      finishTime: String(generateNowTimestamp()),
+    }
+
+    console.log('newTaskItem', newTaskItem)
+
+    UpdateTaskData(taskItem.id, newTaskItem)
+      .then((res) => {
+        if (res.flag) {
+          toast('已完成', {
+            type: 'success',
+          })
+
+          getTaskData()
         } else {
           toast(res.error, {
             type: 'warn',
@@ -70,7 +103,7 @@ export const PendingTask: React.FC = () => {
     AddTaskData(taskItem)
       .then((res) => {
         if (!res) {
-          toast('添加成功', {
+          toast('已添加', {
             type: 'success',
           })
 
@@ -79,6 +112,32 @@ export const PendingTask: React.FC = () => {
           toast(res, {
             type: 'warn',
           })
+        }
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
+  const onDelete = (id: string) => {
+    DeleteTaskData(id)
+      .then((res) => {
+        if (res) {
+          toast(res, {
+            type: 'warn',
+          })
+        } else {
+          setModalInfo({
+            open: false,
+            id: '',
+            title: '',
+          })
+
+          toast('已删除', {
+            type: 'success',
+          })
+
+          getTaskData()
         }
       })
       .catch((err) => {
@@ -96,7 +155,7 @@ export const PendingTask: React.FC = () => {
         <div className={styles.inputLayout}>
           <TextField.Root
             className={styles.input}
-            placeholder="添加一条待办..."
+            placeholder="添加一条待办任务..."
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setTaskTitle(e.target.value)
             }
@@ -164,7 +223,12 @@ export const PendingTask: React.FC = () => {
           >
             <div className={styles.taskItem}>
               <div className={styles.info}>
-                <div className={styles.taskTitle}>{item.title}</div>
+                <div
+                  className={styles.taskTitle}
+                  title={item.title}
+                >
+                  {item.title}
+                </div>
 
                 <div className={styles.taskDetail}>
                   <span>
@@ -172,7 +236,7 @@ export const PendingTask: React.FC = () => {
                     {item.isAlert ? '启用' : '禁用'}
 
                     <label>计划完成时间：</label>
-                    {item.estimatedTime}
+                    {item.estimatedTime || '--'}
                   </span>
                 </div>
               </div>
@@ -185,9 +249,7 @@ export const PendingTask: React.FC = () => {
                     variant="soft"
                     title="标记为完成"
                     onClick={() => {
-                      toast('心想事成', {
-                        type: 'success',
-                      })
+                      onFinish(item)
                     }}
                   >
                     <CheckLineIcon />
@@ -198,9 +260,10 @@ export const PendingTask: React.FC = () => {
                     variant="soft"
                     title="删除"
                     onClick={() => {
-                      toast('Error: Delete failed', {
-                        type: 'warn',
-                        duration: 5000,
+                      setModalInfo({
+                        open: true,
+                        id: item.id,
+                        title: item.title,
                       })
                     }}
                   >
@@ -212,6 +275,37 @@ export const PendingTask: React.FC = () => {
           </Card>
         ))}
       </div>
+
+      <Modal
+        title="提示"
+        width="400px"
+        open={modalInfo.open}
+        options={
+          <>
+            <Button
+              variant="soft"
+              onClick={() => {
+                onDelete(modalInfo.id)
+              }}
+            >
+              确定
+            </Button>
+          </>
+        }
+        onClose={(r) => {
+          setModalInfo({
+            open: false,
+            id: '',
+            title: '',
+          })
+
+          if (r) {
+            getTaskData()
+          }
+        }}
+      >
+        <p>确定要删除任务：{modalInfo.title} 吗？</p>
+      </Modal>
     </div>
   )
 }

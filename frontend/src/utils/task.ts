@@ -2,6 +2,7 @@ import {
   ReadTaskData as ReadTaskDataGo,
   UpdateTaskData as UpdateTaskDataGo,
   AddTaskData as AddTaskDataGo,
+  DeleteTaskData as DeleteTaskDataGo,
 } from 'wailsjs/go/main/App'
 import { TaskItem } from '@/types'
 
@@ -12,3 +13,5 @@ export const UpdateTaskData = async (id: string, taskItem: TaskItem) =>
 
 export const AddTaskData = async (taskItem: TaskItem) =>
   await AddTaskDataGo(taskItem)
+
+export const DeleteTaskData = async (id: string) => await DeleteTaskDataGo(id)

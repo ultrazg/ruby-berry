@@ -97,6 +97,11 @@ func (a *App) AddTaskData(item TaskItem) string {
 func (a *App) DeleteTaskData(id string) string {
 	var taskData TaskData
 
+	if err := viper.Unmarshal(&taskData); err != nil {
+		log.Printf("解析配置文件失败: %v", err)
+		return fmt.Sprintf("读取数据失败，请尝试重启应用: %v", err.Error())
+	}
+
 	for i, task := range taskData.Records {
 		if task.ID == id {
 			taskData.Records = append(taskData.Records[:i], taskData.Records[i+1:]...)
@@ -113,12 +118,12 @@ func (a *App) DeleteTaskData(id string) string {
 
 func (a *App) UpdateTaskData(id string, item TaskItem) UpdateConfigResult {
 	var taskData TaskData
-	// if err := viper.Unmarshal(&taskData); err != nil {
-	// 	return UpdateConfigResult{
-	// 		Flag:  false,
-	// 		Error: fmt.Sprintf("解析配置文件失败: %v", err),
-	// 	}
-	// }
+	if err := viper.Unmarshal(&taskData); err != nil {
+		return UpdateConfigResult{
+			Flag:  false,
+			Error: fmt.Sprintf("解析配置文件失败: %v", err),
+		}
+	}
 
 	for i, task := range taskData.Records {
 		if task.ID == id {
